@@ -1,5 +1,5 @@
 const MEMBERS = [
-  { name: 'Zekey Benitah',   role: 'Team Captain',              photo: null },
+  { name: 'Zach Benitah',   role: 'Team Captain',              photo: null },
   { name: 'Alex Morgan',    role: 'Builder',                    photo: null },
   { name: 'Jamie Ellis',    role: 'Builder',                    photo: null },
   { name: 'Sam Patel',      role: 'Coder',                     photo: null },

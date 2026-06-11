@@ -1,10 +1,10 @@
 const MEMBERS = [
-  { name: 'Zach Benitah',   role: 'Team Captain',              photo: null },
-  { name: 'Alex Morgan',    role: 'Builder',                    photo: null },
-  { name: 'Jamie Ellis',    role: 'Builder',                    photo: null },
-  { name: 'Sam Patel',      role: 'Coder',                     photo: null },
-  { name: 'Chris Nakamura', role: 'Sponsorships / Notebooker', photo: null },
-  { name: 'Jordan Clarke',  role: 'Driver / Notebooker',       photo: null },
+  { name: 'Zekey Benitah',   role: 'Team Captain',              photo: null },
+  { name: 'Vihaan Mittal',    role: 'Builder',                    photo: null },
+  { name: 'Dylan Schwartz',    role: 'Builder',                    photo: null },
+  { name: 'Alex Zhang',      role: 'Coder',                     photo: null },
+  { name: 'Ishaan Sabharwal', role: 'Sponsorships / Notebooker', photo: null },
+  { name: 'Ilyas Dalal',  role: 'Driver / Notebooker',       photo: null },
 ] as const;
 
 const ROLE_COLORS: Record<string, string> = {

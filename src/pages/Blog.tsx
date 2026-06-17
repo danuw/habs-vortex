@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { supabase, type Post } from '../lib/supabase';
+import { posts } from '../lib/posts';
 
 const CATEGORY_COLORS: Record<string, string> = {
   'Competition Update': '#4a7fc1',
@@ -10,6 +9,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 function formatDate(iso: string) {
+  if (!iso) return '';
   return new Date(iso).toLocaleDateString('en-GB', {
     day: 'numeric',
     month: 'long',
@@ -23,22 +23,6 @@ function excerpt(content: string, max = 160) {
 }
 
 export default function Blog() {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    supabase
-      .from('posts')
-      .select('id,title,slug,content,category,sponsor_name,published_at')
-      .order('published_at', { ascending: false })
-      .then(({ data, error }) => {
-        if (error) setError(error.message);
-        else setPosts(data ?? []);
-        setLoading(false);
-      });
-  }, []);
-
   return (
     <div className="page">
       <section className="page-header">
@@ -47,32 +31,22 @@ export default function Blog() {
       </section>
 
       <section className="section-wrap">
-        {loading && (
-          <div className="blog-state">Loading posts&hellip;</div>
-        )}
-
-        {error && (
-          <div className="blog-state blog-state--error">
-            Could not load posts. Please try again later.
-          </div>
-        )}
-
-        {!loading && !error && posts.length === 0 && (
+        {posts.length === 0 && (
           <div className="blog-state">No posts yet &mdash; check back soon!</div>
         )}
 
-        {!loading && !error && posts.length > 0 && (
+        {posts.length > 0 && (
           <div className="blog-grid">
             {posts.map(post => (
               <Link
-                key={post.id}
+                key={post.slug}
                 to={`/blog/${post.slug}`}
                 className={`blog-card${post.category === 'Sponsor Spotlight' ? ' blog-card--sponsor' : ''}`}
               >
-                {post.category === 'Sponsor Spotlight' && post.sponsor_name && (
+                {post.category === 'Sponsor Spotlight' && post.sponsorName && (
                   <div className="blog-sponsor-banner">
                     <span className="blog-sponsor-label">Sponsor Spotlight</span>
-                    <span className="blog-sponsor-name">{post.sponsor_name}</span>
+                    <span className="blog-sponsor-name">{post.sponsorName}</span>
                   </div>
                 )}
 
@@ -84,7 +58,7 @@ export default function Blog() {
                     >
                       {post.category}
                     </span>
-                    <span className="blog-date">{formatDate(post.published_at)}</span>
+                    <span className="blog-date">{formatDate(post.date)}</span>
                   </div>
                   <h2 className="blog-card-title">{post.title}</h2>
                   <p className="blog-card-excerpt">{excerpt(post.content)}</p>

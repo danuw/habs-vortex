@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { supabase, type Post } from '../lib/supabase';
+import ReactMarkdown from 'react-markdown';
+import { getPost } from '../lib/posts';
 
 const CATEGORY_COLORS: Record<string, string> = {
   'Competition Update': '#4a7fc1',
@@ -10,6 +10,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 function formatDate(iso: string) {
+  if (!iso) return '';
   return new Date(iso).toLocaleDateString('en-GB', {
     day: 'numeric',
     month: 'long',
@@ -19,33 +20,9 @@ function formatDate(iso: string) {
 
 export default function BlogPost() {
   const { slug } = useParams<{ slug: string }>();
-  const [post, setPost] = useState<Post | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
+  const post = slug ? getPost(slug) : undefined;
 
-  useEffect(() => {
-    if (!slug) return;
-    supabase
-      .from('posts')
-      .select('id,title,slug,content,category,sponsor_name,published_at')
-      .eq('slug', slug)
-      .maybeSingle()
-      .then(({ data, error }) => {
-        if (error || !data) setNotFound(true);
-        else setPost(data);
-        setLoading(false);
-      });
-  }, [slug]);
-
-  if (loading) {
-    return (
-      <div className="page">
-        <div className="blog-state">Loading&hellip;</div>
-      </div>
-    );
-  }
-
-  if (notFound || !post) {
+  if (!post) {
     return (
       <div className="page">
         <div className="page-header">
@@ -61,10 +38,10 @@ export default function BlogPost() {
 
   return (
     <div className="page">
-      {post.category === 'Sponsor Spotlight' && post.sponsor_name && (
+      {post.category === 'Sponsor Spotlight' && post.sponsorName && (
         <div className="post-sponsor-hero">
           <span className="blog-sponsor-label">Sponsor Spotlight</span>
-          <h2 className="post-sponsor-title">{post.sponsor_name}</h2>
+          <h2 className="post-sponsor-title">{post.sponsorName}</h2>
           <p className="post-sponsor-sub">Official partner of HABS Vortex</p>
         </div>
       )}
@@ -79,15 +56,13 @@ export default function BlogPost() {
           >
             {post.category}
           </span>
-          <span className="blog-date">{formatDate(post.published_at)}</span>
+          <span className="blog-date">{formatDate(post.date)}</span>
         </div>
 
         <h1 className="post-title">{post.title}</h1>
 
         <div className="post-content">
-          {post.content.split('\n\n').map((para, i) => (
-            <p key={i}>{para.trim()}</p>
-          ))}
+          <ReactMarkdown>{post.content}</ReactMarkdown>
         </div>
 
         <div className="post-footer-nav">

@@ -5,6 +5,8 @@ import Home from './pages/Home';
 import Team from './pages/Team';
 import Sponsor from './pages/Sponsor';
 import Contact from './pages/Contact';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
 
 export default function App() {
   return (
@@ -17,6 +19,8 @@ export default function App() {
             <Route path="/team" element={<Team />} />
             <Route path="/sponsor" element={<Sponsor />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
           </Routes>
         </main>
         <Footer />

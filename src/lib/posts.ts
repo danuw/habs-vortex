@@ -1,4 +1,4 @@
-import matter from 'gray-matter';
+import ReactMarkdown from 'react-markdown';
 
 export interface Post {
   slug: string;
@@ -9,8 +9,20 @@ export interface Post {
   content: string;
 }
 
-// Vite loads all .md files in src/posts/ as raw strings at build time.
-// Nothing is fetched at runtime — the result is baked into the static bundle.
+function parseFrontmatter(raw: string): { data: Record<string, string>; content: string } {
+  const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
+  if (!match) return { data: {}, content: raw };
+  const data: Record<string, string> = {};
+  for (const line of match[1].split(/\r?\n/)) {
+    const colon = line.indexOf(':');
+    if (colon === -1) continue;
+    const key = line.slice(0, colon).trim();
+    const val = line.slice(colon + 1).trim().replace(/^["']|["']$/g, '');
+    if (key) data[key] = val;
+  }
+  return { data, content: match[2] };
+}
+
 const rawFiles = import.meta.glob('../posts/*.md', {
   query: '?raw',
   eager: true,
@@ -18,18 +30,16 @@ const rawFiles = import.meta.glob('../posts/*.md', {
 
 export const posts: Post[] = Object.entries(rawFiles)
   .map(([path, mod]) => {
-    const { data, content } = matter(mod.default);
+    const { data, content } = parseFrontmatter(mod.default);
     const slug =
-      typeof data.slug === 'string'
-        ? data.slug
-        : path.replace(/^.*\//, '').replace(/\.md$/, '');
+      data.slug ??
+      path.replace(/^.*\//, '').replace(/\.md$/, '');
     return {
       slug,
-      title: typeof data.title === 'string' ? data.title : slug,
-      date: data.date ? String(data.date).slice(0, 10) : '',
-      category: typeof data.category === 'string' ? data.category : 'Update',
-      sponsorName:
-        typeof data.sponsorName === 'string' ? data.sponsorName : undefined,
+      title: data.title ?? slug,
+      date: data.date ? data.date.slice(0, 10) : '',
+      category: data.category ?? 'Update',
+      sponsorName: data.sponsorName ?? undefined,
       content: content.trim(),
     };
   })
@@ -38,3 +48,5 @@ export const posts: Post[] = Object.entries(rawFiles)
 export function getPost(slug: string): Post | undefined {
   return posts.find(p => p.slug === slug);
 }
+
+export { ReactMarkdown };

@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main, v2]
   workflow_dispatch:
 
 permissions:
@@ -10,7 +10,6 @@ permissions:
   pages: write
   id-token: write
 
-# Only one deployment at a time; don't cancel in-flight runs.
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -33,12 +32,6 @@ jobs:
 
       - name: Build
         run: npm run build
-        env:
-          # Sets the Vite base path so assets resolve correctly under /<repo-name>/
-          VITE_BASE_PATH: /${{ github.event.repository.name }}/
-
-      - name: Create 404.html for SPA routing
-        run: cp dist/index.html dist/404.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

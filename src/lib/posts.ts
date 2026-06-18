@@ -1,5 +1,3 @@
-import ReactMarkdown from 'react-markdown';
-
 export interface Post {
   slug: string;
   title: string;
@@ -48,5 +46,3 @@ export const posts: Post[] = Object.entries(rawFiles)
 export function getPost(slug: string): Post | undefined {
   return posts.find(p => p.slug === slug);
 }
-
-export { ReactMarkdown };

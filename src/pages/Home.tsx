@@ -26,8 +26,8 @@ export default function Home() {
             <div className="card-icon">&#x1F916;</div>
             <h3>Who We Are</h3>
             <p>
-              HABS Vortex is a competitive VEX IQ robotics team based at Haberdashers&rsquo; Elstree School.
-              We design, build, code, and drive our robot to compete at regional and national tournaments.
+              HABS Vortex is a competitive VEX IQ robotics team based at Haberdashers&rsquo; Boys' School.
+              We design, build, code, and drive our robot to compete at regional competitions and, we hope, national and world competitions.
             </p>
           </div>
           <div className="card">
@@ -35,14 +35,14 @@ export default function Home() {
             <h3>Our Mission</h3>
             <p>
               We push the limits of student engineering &mdash; combining creative design, strategic
-              programming, and relentless teamwork to perform on the competition floor.
+              programming, and relentless teamwork to perform on the Level Up field.
             </p>
           </div>
           <div className="card">
             <div className="card-icon">&#x1F91D;</div>
             <h3>Partner With Us</h3>
             <p>
-              Sponsoring HABS Vortex places your brand alongside a passionate, high-achieving team.
+              Sponsoring HABS Vortex places your brand alongside a passionate, high-achieving team, who, depending on your Sponsorship Package, will publicise you at every chance we get.
               Explore our sponsorship tiers and help us build something amazing.
             </p>
           </div>

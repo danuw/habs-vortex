@@ -21,7 +21,7 @@ export default function Contact() {
               </svg>
             </div>
             <span className="contact-role-badge">Team Captain</span>
-            <h3>Zekey Benitah</h3>
+            <h3>Zach Benitah</h3>
             <p>
               For all enquiries &mdash; sponsorships, competition invitations, media requests,
               or just to say hello &mdash; reach out to our Team Captain directly.
